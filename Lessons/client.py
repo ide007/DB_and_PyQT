@@ -4,6 +4,8 @@ import sys
 import time
 import argparse
 from threading import Thread
+
+from Lessons.metaclass import ClientVerifier
 from log_decorator import log
 from socket import socket, AF_INET, SOCK_STREAM
 from common.variables import ACTION, ACCOUNT_NAME, DEFAULT_IP_ADDRESS, \
@@ -17,7 +19,7 @@ logger.info('Клиент начинает работу!')
 
 # Класс формирования и отправки сообщения на сервер также отвечает за
 # взаимодействие с пользователем.
-class ClientSender(Thread):
+class ClientSender(Thread, metaclass=ClientVerifier):
     def __init__(self, account_name, sock):
         self.account_name = account_name
         self.sock = sock
@@ -59,6 +61,7 @@ class ClientSender(Thread):
             logger.critical('Потеряно соединение с сервером.')
             sys.exit(1)
 
+    @log
     def print_help(self):
         """Справка для пользователя"""
         print('\nСписок поддерживаемых команд: ')
@@ -99,7 +102,7 @@ class ClientSender(Thread):
 
 # Класс клиента отвечающего за прием сообщения, печать сообщения и завершается
 # при потере соединения с сервером.
-class ClientReader(Thread):
+class ClientReader(Thread, metaclass=ClientVerifier):
     def __init__(self, account_name, sock):
         self.account_name = account_name
         self.sock = sock
