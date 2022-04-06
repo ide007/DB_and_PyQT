@@ -15,6 +15,9 @@ MAX_MESSAGE_LEN = 1024
 # Применяемая кодировка
 ENCODING = 'utf-8'
 
+# БД для хранения данных сервера
+SERVER_DATABASE = 'sqlite:///server_base.db3'
+
 # Протокол JIM, основные ключи:
 ACTION = 'action'
 TIME = 'time'

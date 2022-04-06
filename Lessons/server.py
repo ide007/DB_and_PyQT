@@ -14,6 +14,7 @@ from common.variables import ACTION, ACCOUNT_NAME, MAX_CONNECTIONS, \
 from common.utils import read_message, send_message
 from log_decorator import log
 from logs.server_log_config import server_logger
+from server_db import ServerDb
 
 
 @log
@@ -40,10 +41,12 @@ class Server(metaclass=ServerVerifier):
     server_logger.info('Запуск сервера... Анализ параметров запуска...')
     port = PortDescriptor()
 
-    def __init__(self, listen_address, listen_port):
+    def __init__(self, listen_address, listen_port, database):
         # Параметры подключения
         self.listen_address = listen_address
         self.port = listen_port
+
+        self.database = database
 
         # список подключенных клиентов
         self.all_clients = []
@@ -151,6 +154,9 @@ class Server(metaclass=ServerVerifier):
                 message and USER in message:
             if message[USER][ACCOUNT_NAME] not in self.names.keys():
                 self.names[message[USER][ACCOUNT_NAME]] = client
+                client_ip, client_port = client.getpeername()
+                self.database.user_login(message[USER][ACCOUNT_NAME],
+                                         client_ip, client_port)
                 send_message(client, {RESPONSE: 200})
             else:
                 send_message(client, {RESPONSE: 400,
@@ -170,6 +176,7 @@ class Server(metaclass=ServerVerifier):
         # Если клиент выходит
         elif ACTION in message and message[ACTION] == EXIT and ACCOUNT_NAME\
                 in message:
+            self.database.user_logout(message[ACCOUNT_NAME])
             self.all_clients.remove(self.names[message[ACCOUNT_NAME]])
             self.names[message[ACCOUNT_NAME]].close()
             del self.names[message[ACCOUNT_NAME]]
@@ -189,6 +196,8 @@ def main():
     параметры по умолчанию, из файла variables.py
     """
     listen_address, listen_port = arg_parser()
+
+    server_db = ServerDb()
 
     # создание экземпляра класса сервера.
     server = Server(listen_address, listen_port)
