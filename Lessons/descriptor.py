@@ -1,6 +1,6 @@
 from logs.server_log_config import server_logger as log
 
-logger = log.getLogger('server')
+logger = log.debug('Server')
 
 
 class PortDescriptor:
