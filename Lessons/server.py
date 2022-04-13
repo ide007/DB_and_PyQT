@@ -12,7 +12,7 @@ from threading import Thread, Lock
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
-from Lessons.server_gui import MainWindow, gui_create_model, HistoryWindow, \
+from server_gui import MainWindow, gui_create_model, HistoryWindow, \
     create_stat_model, ConfigWindow
 from descriptor import PortDescriptor
 from metaclass import ServerVerifier
@@ -41,12 +41,12 @@ def arg_parser(default_port, default_address):
     listen_port = args.p
     listen_address = args.a
     # Проверка на получение корректного номера порта для работы сервера
-    if 65535 < listen_port < 1024:
-        server_logger.warning(f'Ошибка применения параметра порта'
-                              f' {listen_port}, так как параметр не'
-                              f' удовлетворяющий требованиям. Допустимы порт'
-                              f' в интервале от 1024 до 65535.')
-        sys.exit(1)
+    # if 65535 < listen_port < 1024:
+    #     server_logger.warning(f'Ошибка применения параметра порта'
+    #                           f' {listen_port}, так как параметр не'
+    #                           f' удовлетворяющий требованиям. Допустимы порт'
+    #                           f' в интервале от 1024 до 65535.')
+    #     sys.exit(1)
     return listen_address, listen_port
 
 
@@ -113,8 +113,8 @@ class Server(Thread, metaclass=ServerVerifier):
                 if self.all_clients:
                     recv_data_lst, send_data_lst, err_lst = select.select(
                         self.all_clients, self.all_clients, [], 0)
-            except OSError:
-                pass
+            except OSError as err:
+                server_logger.error(f'Ошибка работы с сокетами: {err}')
 
             # Принимаем сообщение, если ошибка исключаем клиентский сокет
             if recv_data_lst:
@@ -133,6 +133,7 @@ class Server(Thread, metaclass=ServerVerifier):
                                 self.database.user_logout(name)
                                 del self.names[name]
                                 break
+                        self.all_clients.remove(client_message)
 
             # Если есть сообщения, обрабатываем каждое в цикле
             for i in self.messages:
@@ -213,8 +214,8 @@ class Server(Thread, metaclass=ServerVerifier):
                 new_connection = True
             return
         # запрос контакт-листа
-        elif ACTION in message and message[ACTION] == GET_CONTACTS and USER in\
-                message and self.names[message[USER]] == client:
+        elif ACTION in message and message[ACTION] == GET_CONTACTS and USER \
+                in message and self.names[message[USER]] == client:
             response = RESPONSE_202
             response[LIST_INFO] = self.database.get_contacts(message[USER])
             send_message(client, response)
@@ -228,7 +229,8 @@ class Server(Thread, metaclass=ServerVerifier):
         elif ACTION in message and message[ACTION] == REMOVE_CONTACT and \
             ACCOUNT_NAME in message and USER in message and \
             self.names[message[USER]] == client:
-            self.database.remove_contact(message[USER], message[ACCOUNT_NAME])
+            self.database.remove_contact(message[USER],
+                                         message[ACCOUNT_NAME])
             send_message(client, RESPONSE_200)
         # запрос известных пользователей
         elif ACTION in message and message[ACTION] == USERS_REQUEST and \
@@ -265,7 +267,6 @@ def main():
         os.path.join(
             config['SETTINGS']['Database_path'],
             config['SETTINGS']['Database_file']))
-    listen_address, listen_port = arg_parser()
 
     # создание экземпляра класса сервера.
     server = Server(listen_address, listen_port, server_db)

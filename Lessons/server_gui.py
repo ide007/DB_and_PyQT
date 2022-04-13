@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QDesktopWidget, QLabel, 
     QTableView, QDialog, QLineEdit, QPushButton, QFileDialog, QApplication, \
     QMessageBox
 
-from Lessons.common.variables import WINDOW_HEIGHT, WINDOW_WIGHT
+from common.variables import WINDOW_HEIGHT, WINDOW_WIGHT
 
 
 def gui_create_model(databese):
@@ -139,7 +139,7 @@ class ConfigWindow(QDialog):
 
     def initUI(self):
         # Настройки окна
-        self.setFixedSize(400, 260)
+        self.setFixedSize(600, 400)
         self.setWindowTitle('Настройки сервера')
 
         # Надпись о файле базы данных:

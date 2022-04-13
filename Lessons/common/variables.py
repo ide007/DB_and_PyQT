@@ -15,6 +15,9 @@ MAX_MESSAGE_LEN = 1024
 # Применяемая кодировка
 ENCODING = 'utf-8'
 
+# База данных для хранения данных сервера:
+SERVER_CONFIG = 'server.ini'
+
 # БД для хранения данных сервера
 SERVER_DATABASE = 'sqlite:///server_base.db3'
 

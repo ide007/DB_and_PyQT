@@ -50,8 +50,10 @@ class ServerDb:
 
     def __init__(self, path):
         # создаём движок БД сервера
-        self.db_engine = create_engine(f'sqlite:///{path}', echo=False,
-                                       pool_recycle = 3600,
+        print(path)
+        self.db_engine = create_engine(f'sqlite:///{path}',
+                                       echo=False,
+                                       pool_recycle=3600,
                                        connect_args={
                                            'check_same_thread': False})
         # создаём объект MetaData
@@ -150,7 +152,8 @@ class ServerDb:
             user_id=user.id).delete()
         self.session.commit()
 
-    # функция возвращает всех известных пользователей и время последнего входа
+    # функция возвращает всех известных пользователей и время последнего
+    # входа
     def users_list(self):
         query = self.session.query(
             self.AllUsers.user_name, self.AllUsers.last_login,)
