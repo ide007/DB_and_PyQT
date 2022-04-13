@@ -49,3 +49,9 @@
 2022 Mar 26 18:04:37 DEBUG    wrap Функция-"create_message" была вызвана из модуля-"__main__" и инициирован из функцией-"user_interactive", с параметрами "(<socket.socket fd=332, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 53071), raddr=('127.0.0.1', 7777)>, 'client2')", "{}".
 2022 Mar 26 18:04:38 DEBUG    wrap Функция-"read_message" была вызвана из модуля-"common.utils" и инициирован из функцией-"server_answer", с параметрами "(<socket.socket fd=396, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 53070), raddr=('127.0.0.1', 7777)>,)", "{}".
 2022 Mar 26 18:04:38 INFO     server_answer Получено сообщение от пользователя  client2: и тебе привет!
+2022 Apr 11 23:05:40 INFO     <module> Клиент начинает работу!
+2022 Apr 11 23:05:41 INFO     <module> Клиент начинает работу!
+2022 Apr 11 23:05:41 INFO     <module> Клиент начинает работу!
+2022 Apr 11 23:05:58 INFO     <module> Клиент начинает работу!
+2022 Apr 11 23:05:59 INFO     <module> Клиент начинает работу!
+2022 Apr 11 23:06:00 INFO     <module> Клиент начинает работу!
