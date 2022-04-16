@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Table, Column, Integer, String, Text,\
+from sqlalchemy import create_engine, Table, Column, Integer, String, Text, \
     MetaData, DateTime
 from sqlalchemy.orm import mapper, sessionmaker
 from common.variables import *
@@ -107,15 +107,18 @@ class ClientDatabase:
 
     # Функция возвращающяя контакты
     def get_contacts(self):
-        return [contact[0] for contact in self.session.query(self.Contacts.name).all()]
+        return [contact[0] for contact in
+                self.session.query(self.Contacts.name).all()]
 
     # Функция возвращающяя список известных пользователей
     def get_users(self):
-        return [user[0] for user in self.session.query(self.KnownUsers.username).all()]
+        return [user[0] for user in
+                self.session.query(self.KnownUsers.username).all()]
 
     # Функция проверяющяя наличие пользователя в известных
     def check_user(self, user):
-        if self.session.query(self.KnownUsers).filter_by(username=user).count():
+        if self.session.query(self.KnownUsers).filter_by(
+                username=user).count():
             return True
         else:
             return False

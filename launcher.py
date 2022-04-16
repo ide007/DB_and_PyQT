@@ -2,7 +2,7 @@
 import time
 from subprocess import Popen, CREATE_NEW_CONSOLE
 
-PROCESSED = []
+processed = []
 
 while True:
     user = input('Запуск сервера и клиентов (s) / Закрытие клиентов (x) / '
@@ -12,14 +12,15 @@ while True:
         break
 
     elif user == 's':
-        PROCESSED.append(Popen('python server.py',
-                               creationflags=CREATE_NEW_CONSOLE))
+        processed.append(Popen('python server.py',
+                               creationflags=CREATE_NEW_CONSOLE, shell=True))
         for i in range(3):
             time.sleep(0.5)
-            PROCESSED.append(Popen(f'python client.py -n client{i + 1}',
-                                   creationflags=CREATE_NEW_CONSOLE))
+            processed.append(Popen(f'python client.py -n client{i + 1}',
+                                   creationflags=CREATE_NEW_CONSOLE,
+                                   shell=True))
     elif user == 'x':
-        while PROCESSED:
-            _ = PROCESSED.pop()
+        while processed:
+            _ = processed.pop()
             _.kill()
-        PROCESSED.clear()
+        processed.clear()

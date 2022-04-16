@@ -6,16 +6,16 @@ import os
 import sys
 import select
 import argparse
-from socket import socket, AF_INET, SOCK_STREAM
-from threading import Thread, Lock
 
+import socket
+from threading import Thread, Lock
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
-from Lessons.server_gui import MainWindow, gui_create_model, HistoryWindow, \
+from server_gui import MainWindow, gui_create_model, HistoryWindow, \
     create_stat_model, ConfigWindow
 from descriptor import PortDescriptor
-from metaclass import ServerVerifier
+from metaclasses import ServerVerifier
 from common.variables import ACTION, ACCOUNT_NAME, MAX_CONNECTIONS, \
     DESTINATION, PRESENCE, RESPONSE, TIME, USER, ERROR, MESSAGE, MESSAGE_TEXT, \
     SENDER, EXIT, RESPONSE_200, GET_CONTACTS, RESPONSE_202, LIST_INFO, \
@@ -40,13 +40,13 @@ def arg_parser(default_port, default_address):
     args = parser.parse_args(sys.argv[1:])
     listen_port = args.p
     listen_address = args.a
-    # Проверка на получение корректного номера порта для работы сервера
-    if 65535 < listen_port < 1024:
-        server_logger.warning(f'Ошибка применения параметра порта'
-                              f' {listen_port}, так как параметр не'
-                              f' удовлетворяющий требованиям. Допустимы порт'
-                              f' в интервале от 1024 до 65535.')
-        sys.exit(1)
+    # # Проверка на получение корректного номера порта для работы сервера
+    # if 65535 < listen_port < 1024:
+    #     server_logger.warning(f'Ошибка применения параметра порта'
+    #                           f' {listen_port}, так как параметр не'
+    #                           f' удовлетворяющий требованиям. Допустимы порт'
+    #                           f' в интервале от 1024 до 65535.')
+    #     sys.exit(1)
     return listen_address, listen_port
 
 
@@ -77,17 +77,19 @@ class Server(Thread, metaclass=ServerVerifier):
     def init_socket(self):
         server_logger.info(f'Сервер запущен, порт для подключений: '
                            f'{self.port}, адрес подключения: '
-                           f'{self.listen_address}.')
-        server = socket(AF_INET, SOCK_STREAM)
+                           f'{self.listen_address}. Если адрес не указан, '
+                           f'соединения принимаются с любых адресов.')
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.bind((self.listen_address, self.port))
         server.settimeout(0.5)
 
         # Начинаем слушать сокет
         self.sock = server
-        self.sock.listen(MAX_CONNECTIONS)
+        self.sock.listen()
 
     def main_loop(self):
         # Инициализация сокета
+        global new_connection
         self.init_socket()
 
         # Основной цикл программы сервера
@@ -255,7 +257,7 @@ def main():
     config.read(f"{dir_path}/{'server.ini'}")
 
     # Загрузка параметров командной строки, если нет параметров, то задаём
-    # значения по умоланию.
+    # значения по умолчанию.
     listen_address, listen_port = arg_parser(
         config['SETTINGS']['Default_port'],
         config['SETTINGS']['Listen_Address'])
@@ -265,7 +267,6 @@ def main():
         os.path.join(
             config['SETTINGS']['Database_path'],
             config['SETTINGS']['Database_file']))
-    listen_address, listen_port = arg_parser()
 
     # создание экземпляра класса сервера.
     server = Server(listen_address, listen_port, server_db)
