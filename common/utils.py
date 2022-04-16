@@ -2,6 +2,7 @@
 Функции кодирования и отправки, а также приема и декодирования сообщений
 """
 import json
+from errors import IncorrectDataRecivedError, NonDictInputError
 from .variables import MAX_MESSAGE_LEN, ENCODING
 import sys
 sys.path.append('../')
@@ -17,12 +18,11 @@ def send_message(socket, message):
     :param message: dict
     :return: bytes(in json)
     """
-    try:
-        js_message = json.dumps(message)
-        encoded_message = js_message.encode(ENCODING)
-        socket.send(encoded_message)
-    except Exception as err:
-        raise print(err)
+    if not isinstance(message, dict):
+        raise NonDictInputError
+    js_message = json.dumps(message)
+    encoded_message = js_message.encode(ENCODING)
+    socket.send(encoded_message)
 
 
 @log
@@ -35,7 +35,11 @@ def read_message(socket):
     """
     encoded_response = socket.recv(MAX_MESSAGE_LEN)
     if isinstance(encoded_response, bytes):
-        if isinstance(json.loads(encoded_response.decode(ENCODING)), dict):
-            return json.loads(encoded_response.decode(ENCODING))
-        raise ValueError
-    raise ValueError
+        json_response = encoded_response.decode(ENCODING)
+        response = json.loads(json_response)
+        if isinstance(response, dict):
+            return response
+        else:
+            raise IncorrectDataRecivedError
+    else:
+        raise IncorrectDataRecivedError

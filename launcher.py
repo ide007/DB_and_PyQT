@@ -12,15 +12,15 @@ while True:
         break
 
     elif user == 's':
+        clients_count = int(input('Введите количество клиентов для запуска: '))
         processed.append(Popen('python server.py',
                                creationflags=CREATE_NEW_CONSOLE, shell=True))
-        for i in range(3):
+        for i in range(clients_count):
             time.sleep(0.5)
             processed.append(Popen(f'python client.py -n client{i + 1}',
                                    creationflags=CREATE_NEW_CONSOLE,
                                    shell=True))
     elif user == 'x':
         while processed:
-            _ = processed.pop()
-            _.kill()
+            processed.pop().kill()
         processed.clear()

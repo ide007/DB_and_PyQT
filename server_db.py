@@ -220,14 +220,14 @@ class ServerDb:
     def login_history(self, user_name=None):
 
         query = self.session.query(
-            self.AllUsers.name,
+            self.AllUsers.user_name,
             self.LoginHistory.date,
             self.LoginHistory.ip,
             self.LoginHistory.port
         ).join(self.AllUsers)
 
         if user_name:
-            query = query.filter(self.AllUsers.name == user_name)
+            query = query.filter(self.AllUsers.user_name == user_name)
 
         return query.all()
 
@@ -257,16 +257,16 @@ class ServerDb:
 
 
 if __name__ == '__main__':
-    test_db = ServerDb()
+    test_db = ServerDb('')
     test_db.user_login('1111', '192.168.5.20', 8080)
     test_db.user_login('2222', '192.168.5.21', 8081)
     print(test_db.users_list())
-    # print(test_db.active_users_list())
-    # test_db.user_logout('McG')
-    # print(test_db.login_history('re'))
-    # test_db.add_contact('test2', 'test1')
-    # test_db.add_contact('test1', 'test3')
-    # test_db.add_contact('test1', 'test6')
-    # test_db.remove_contact('test1', 'test3')
+    print(test_db.active_users_list())
+    test_db.user_logout('2222')
+    print(test_db.login_history('re'))
+    test_db.add_contact('test2', 'test1')
+    test_db.add_contact('test1', 'test3')
+    test_db.add_contact('test1', 'test6')
+    test_db.remove_contact('test1', 'test3')
     test_db.process_message('2222', '1111')
     print(test_db.message_history())

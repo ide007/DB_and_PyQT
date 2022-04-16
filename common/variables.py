@@ -18,6 +18,9 @@ ENCODING = 'utf-8'
 # БД для хранения данных сервера
 SERVER_DATABASE = 'sqlite:///server_base.db3'
 
+# База данных для хранения данных сервера:
+SERVER_CONFIG = 'server.ini'
+
 # Протокол JIM, основные ключи:
 ACTION = 'action'
 TIME = 'time'

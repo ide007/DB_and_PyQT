@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine, Table, Column, Integer, String, Text, \
     MetaData, DateTime
 from sqlalchemy.orm import mapper, sessionmaker
-from common.variables import *
 from datetime import datetime
 
 
@@ -35,7 +34,7 @@ class ClientDatabase:
         # подключения с разных потоков,
         # иначе sqlite3.ProgrammingError
         self.database_engine = create_engine(
-            f'sqlite:///client_{login}.db3', echo=False, pool_recycle=7200,
+            f'sqlite:///client_{login}.db3', echo=False, pool_recycle=3600,
             connect_args={'check_same_thread': False})
 
         # Создаём объект MetaData
@@ -44,8 +43,7 @@ class ClientDatabase:
         # Создаём таблицу известных пользователей
         users = Table('known_users', self.metadata,
                       Column('id', Integer, primary_key=True),
-                      Column('user_name', String)
-                      )
+                      Column('username', String))
 
         # Создаём таблицу истории сообщений
         history = Table('message_history', self.metadata,
@@ -53,14 +51,12 @@ class ClientDatabase:
                         Column('from_user', String),
                         Column('to_user', String),
                         Column('message', Text),
-                        Column('date', DateTime)
-                        )
+                        Column('date', DateTime))
 
         # Создаём таблицу контактов
         contacts = Table('contacts', self.metadata,
                          Column('id', Integer, primary_key=True),
-                         Column('name', String, unique=True)
-                         )
+                         Column('name', String, unique=True))
 
         # Создаём таблицы
         self.metadata.create_all(self.database_engine)
@@ -105,17 +101,17 @@ class ClientDatabase:
         self.session.add(message_row)
         self.session.commit()
 
-    # Функция возвращающяя контакты
+    # Функция возвращающая контакты
     def get_contacts(self):
         return [contact[0] for contact in
                 self.session.query(self.Contacts.name).all()]
 
-    # Функция возвращающяя список известных пользователей
+    # Функция возвращающая список известных пользователей
     def get_users(self):
         return [user[0] for user in
                 self.session.query(self.KnownUsers.username).all()]
 
-    # Функция проверяющяя наличие пользователя в известных
+    # Функция проверяющая наличие пользователя в известных
     def check_user(self, user):
         if self.session.query(self.KnownUsers).filter_by(
                 username=user).count():

@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QDesktopWidget, \
     QLabel, QTableView, QDialog, QLineEdit, QPushButton, QFileDialog, \
     QApplication, QMessageBox
 
-from Lessons.common.variables import WINDOW_HEIGHT, WINDOW_WIGHT
+from common.variables import WINDOW_HEIGHT, WINDOW_WIGHT
 
 
 #  GUI - создание графической таблицы
