@@ -1,45 +1,26 @@
-"""
-Функции кодирования и отправки, а также приема и декодирования сообщений
-"""
 import json
-from errors import IncorrectDataRecivedError, NonDictInputError
-from .variables import MAX_MESSAGE_LEN, ENCODING
 import sys
 sys.path.append('../')
-from log_decorator import log
+from common.decos import log
+from common.variables import *
 
-
+# Утилита приёма и декодирования сообщения
+# принимает байты выдаёт словарь, если приняточто-то другое отдаёт ошибку типа
 @log
-def send_message(socket, message):
-    """
-    функция кодирования и отправки сообщения, получает словарь и отправляет
-    байты в формате json.
-    :param socket:
-    :param message: dict
-    :return: bytes(in json)
-    """
-    if not isinstance(message, dict):
-        raise NonDictInputError
+def get_message(client):
+    encoded_response = client.recv(MAX_PACKAGE_LENGTH)
+    json_response = encoded_response.decode(ENCODING)
+    response = json.loads(json_response)
+    if isinstance(response, dict):
+        return response
+    else:
+        raise TypeError
+
+
+# Утилита кодирования и отправки сообщения
+# принимает словарь и отправляет его
+@log
+def send_message(sock, message):
     js_message = json.dumps(message)
     encoded_message = js_message.encode(ENCODING)
-    socket.send(encoded_message)
-
-
-@log
-def read_message(socket):
-    """
-    функция приёма и декодирования сообщения, принимает байты, возвращает
-    словарь,
-    :param socket:
-    :return: dict
-    """
-    encoded_response = socket.recv(MAX_MESSAGE_LEN)
-    if isinstance(encoded_response, bytes):
-        json_response = encoded_response.decode(ENCODING)
-        response = json.loads(json_response)
-        if isinstance(response, dict):
-            return response
-        else:
-            raise IncorrectDataRecivedError
-    else:
-        raise IncorrectDataRecivedError
+    sock.send(encoded_message)
