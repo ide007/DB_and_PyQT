@@ -2,8 +2,6 @@ from sqlalchemy import create_engine, Table, Column, Integer, String, Text, \
     MetaData, DateTime
 from sqlalchemy.orm import mapper, sessionmaker
 import os
-import sys
-sys.path.append('../')
 import datetime
 
 
