@@ -1,4 +1,4 @@
-from logs.server_log_config import server_logger as log
+from logs.config_server_log import logger as log
 
 logger = log.debug('Server')
 
