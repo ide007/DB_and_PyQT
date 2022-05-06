@@ -22,6 +22,7 @@ class ClientMainWindow(QMainWindow):
     Класс - основное окно пользователя.
     Содержит всю основную логику работы клиентского модуля.
     """
+
     def __init__(self, database, transport, keys):
         super().__init__()
         # основные переменные
@@ -314,22 +315,22 @@ class ClientMainWindow(QMainWindow):
                 # Если пользователь есть, следом спрашиваем 'открыть с ним чат'
                 # и открываем при желании
                 if self.messages.question(
-                        self, 'Новое сообщение',
-                        f'Получено новое сообщение от {sender}, открыть чат с'
-                        f' ним?', QMessageBox.Yes,
-                                          QMessageBox.No) == QMessageBox.Yes:
+                    self, 'Новое сообщение',
+                    f'Получено новое сообщение от {sender}, открыть чат с'
+                    f' ним?', QMessageBox.Yes,
+                        QMessageBox.No) == QMessageBox.Yes:
                     self.current_chat = sender
                     self.set_active_user()
             else:
                 print('NO')
                 # Раз нет, спрашиваем хотим ли добавить юзера в контакты.
                 if self.messages.question(
-                        self, 'Новое сообщение',
-                        f'Получено новое сообщение от {sender}.\n Данного '
-                        f'пользователя нет в вашем контакт-листе.\n Добавить в'
-                        f' контакты и открыть чат с ним?',
-                                          QMessageBox.Yes,
-                                          QMessageBox.No) == QMessageBox.Yes:
+                    self, 'Новое сообщение',
+                    f'Получено новое сообщение от {sender}.\n Данного '
+                    f'пользователя нет в вашем контакт-листе.\n Добавить в'
+                    f' контакты и открыть чат с ним?',
+                        QMessageBox.Yes,
+                        QMessageBox.No) == QMessageBox.Yes:
                     self.add_contact(sender)
                     self.current_chat = sender
                     # Нужно заново сохранить сообщение, иначе оно будет

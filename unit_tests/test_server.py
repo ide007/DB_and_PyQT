@@ -1,10 +1,10 @@
+from server import check_and_create_answer_to_client
+from common.variables import ACTION, ACCOUNT_NAME, ERROR, PRESENCE, RESPONSE,\
+    TIME, USER
 import sys
 import os
 import unittest
 sys.path.append(os.path.join(os.getcwd(), '..'))
-from common.variables import ACTION, ACCOUNT_NAME, ERROR, PRESENCE, RESPONSE,\
-    TIME, USER
-from server import check_and_create_answer_to_client
 
 
 class TestServer(unittest.TestCase):
@@ -26,7 +26,7 @@ class TestServer(unittest.TestCase):
 
     def test_wrong_action(self):
         self.assertEqual(check_and_create_answer_to_client({
-            ACTION:'Test wrong action', TIME: 1, USER: {ACCOUNT_NAME: 'Guest',}
+            ACTION: 'Test wrong action', TIME: 1, USER: {ACCOUNT_NAME: 'Guest', }
         }), self.error_dict)
 
     def test_no_time_in_response(self):

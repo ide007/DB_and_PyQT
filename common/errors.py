@@ -4,6 +4,7 @@
 class ServerError(Exception):
     """Класс - исключение, для обработки ошибок сервера.
     Требует строку с описанием ошибки."""
+
     def __init__(self, text):
         self.text = text
 
@@ -16,6 +17,7 @@ class ReqFieldMissingError(Exception):
     """Класс - исключение, для обработки ошибок отсутствия обязательных полей в
      сообщениях.
     """
+
     def __init__(self, missing_field):
         self.missing_field = missing_field
 

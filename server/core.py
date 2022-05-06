@@ -80,8 +80,8 @@ class MessageProcessor(threading.Thread):
             try:
                 if self.clients:
                     recv_data_lst, self.listen_sockets, \
-                    self.error_sockets = select.select(
-                        self.clients, self.clients, [], 0)
+                        self.error_sockets = select.select(
+                            self.clients, self.clients, [], 0)
             except OSError as err:
                 logger.error(f'Ошибка работы с сокетами: {err.errno}')
 
@@ -183,12 +183,12 @@ class MessageProcessor(threading.Thread):
 
         # Если клиент выходит
         elif ACTION in message and message[ACTION] == EXIT and ACCOUNT_NAME in\
-            message and self.names[message[ACCOUNT_NAME]] == client:
+                message and self.names[message[ACCOUNT_NAME]] == client:
             self.remove_client(client)
 
         # Если это запрос контакт-листа
         elif ACTION in message and message[ACTION] == GET_CONTACTS and USER in\
-            message and self.names[message[USER]] == client:
+                message and self.names[message[USER]] == client:
             response = RESPONSE_202
             response[LIST_INFO] = self.database.get_contacts(message[USER])
             try:

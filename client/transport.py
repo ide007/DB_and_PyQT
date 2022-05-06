@@ -2,6 +2,9 @@
 Модуль для реализации транспортной подсистемы клиента.
 Создание клиентского сокета. Взаимодействие клиента с сервером.
 """
+from common.errors import ServerError
+from common.variables import *
+from common.utils import *
 import binascii
 import hashlib
 import hmac
@@ -12,9 +15,6 @@ import threading
 from PyQt5.QtCore import pyqtSignal, QObject
 
 sys.path.append('../')
-from common.utils import *
-from common.variables import *
-from common.errors import ServerError
 
 # Логгер и объект блокировки для работы с сокетом.
 logger = logging.getLogger('client')

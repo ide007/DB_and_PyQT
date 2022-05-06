@@ -1,10 +1,10 @@
 """Модуль приёма и декодирования сообщения. Принимает байты, выдаёт словарь,
 если принято что-то другое отдаёт ошибку типа"""
+from common.variables import *
+from common.decos import log
 import json
 import sys
 sys.path.append('../')
-from common.decos import log
-from common.variables import *
 
 
 @log

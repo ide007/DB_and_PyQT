@@ -254,9 +254,9 @@ class ServerStorage:
         # Проверяем что не дубль и что контакт может существовать (полю
         # пользователь мы доверяем)
         if not contact or self.session.query(
-                self.UsersContacts).filter_by(
-            user=user.id,
-            contact=contact.id).count():
+            self.UsersContacts).filter_by(
+                user=user.id,
+                contact=contact.id).count():
             return
 
         # Создаём объект и заносим его в базу

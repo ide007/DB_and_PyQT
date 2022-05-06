@@ -9,6 +9,7 @@ from PyQt5.QtCore import Qt
 
 class RegisterUser(QDialog):
     """Класс - регистрации пользователей на сервере. Вывод диалогового окна."""
+
     def __init__(self, database, server):
         super().__init__()
 

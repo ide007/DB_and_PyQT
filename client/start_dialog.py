@@ -8,6 +8,7 @@ class UserNameDialog(QDialog):
     Класс создающий приветственный диалог с запросом имени пользователя и
     пароля.
     """
+
     def __init__(self):
         super().__init__()
 
