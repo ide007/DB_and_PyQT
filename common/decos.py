@@ -1,3 +1,4 @@
+"""Модуль проверки авторизации клиента на сервере."""
 import sys
 import socket
 
@@ -7,10 +8,10 @@ import logging
 
 # метод определения модуля, источника запуска.
 if sys.argv[0].find('client') == -1:
-    #если не клиент то сервер!
+    # Если не клиент, то сервер!
     logger = logging.getLogger('server')
 else:
-    # ну, раз не сервер, то клиент
+    # Раз не сервер, то клиент
     logger = logging.getLogger('client')
 
 
@@ -25,17 +26,17 @@ def log(func_to_log):
 
 
 def login_required(func):
-    '''
+    """
     Декоратор, проверяющий, что клиент авторизован на сервере.
     Проверяет, что передаваемый объект сокета находится в
     списке авторизованных клиентов.
     За исключением передачи словаря-запроса
     на авторизацию. Если клиент не авторизован,
-    генерирует исключение TypeError
-    '''
+    генерирует исключение TypeError.
+    """
 
     def checker(*args, **kwargs):
-        # проверяем, что первый аргумент - экземпляр MessageProcessor
+        # Проверяем, что первый аргумент - экземпляр MessageProcessor.
         # Импортировать необходимо тут, иначе ошибка рекурсивного импорта.
         from server.core import MessageProcessor
         from common.variables import ACTION, PRESENCE
@@ -50,7 +51,7 @@ def login_required(func):
                             found = True
 
             # Теперь надо проверить, что передаваемые аргументы не presence
-            # сообщение. Если presense, то разрешаем
+            # сообщение. Если presence, то разрешаем.
             for arg in args:
                 if isinstance(arg, dict):
                     if ACTION in arg and arg[ACTION] == PRESENCE:

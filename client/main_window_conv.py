@@ -1,8 +1,10 @@
+"""Модуль создания основного клиентского окна."""
 from PyQt5 import QtCore, QtWidgets
 from common.variables import WINDOW_WIGHT, WINDOW_HEIGHT
 
 
 class Ui_MainClientWindow(object):
+    """Класс - основного окна клиента."""
     def setupUi(self, MainClientWindow):
         MainClientWindow.setObjectName("MainClientWindow")
         MainClientWindow.resize(WINDOW_WIGHT, WINDOW_HEIGHT)

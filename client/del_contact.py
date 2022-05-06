@@ -1,3 +1,7 @@
+"""
+Модуль для удаления пользователей из списка контактов, с графической оболочкой
+ диалогового окна.
+"""
 import logging
 
 from PyQt5.QtWidgets import QDialog, QLabel, QComboBox, QPushButton, \
@@ -7,8 +11,11 @@ from PyQt5.QtCore import Qt
 logger = logging.getLogger('client')
 
 
-# Диалог выбора контакта для удаления
 class DelContactDialog(QDialog):
+    """
+    Диалог удаления контакта. Предлагает текущий список контактов,
+    не имеет обработчиков для действий.
+    """
     def __init__(self, database):
         super().__init__()
         self.database = database

@@ -1,3 +1,4 @@
+"""Модуль регистрации пользователей на сервере."""
 import binascii
 import hashlib
 
@@ -7,7 +8,7 @@ from PyQt5.QtCore import Qt
 
 
 class RegisterUser(QDialog):
-    """Класс для регистрации пользователей на сервере."""
+    """Класс - регистрации пользователей на сервере. Вывод диалогового окна."""
     def __init__(self, database, server):
         super().__init__()
 
@@ -48,9 +49,10 @@ class RegisterUser(QDialog):
         self.show()
 
     def save_data(self):
-        '''
-        Метод проверки правильности ввода и сохранения в базу нового пользователя.
-        '''
+        """
+        Метод проверки правильности ввода и сохранения в базу нового
+        пользователя.
+        """
         if not self.client_name.text():
             self.messages.critical(
                 self, 'Ошибка', 'Не указано имя пользователя.')
@@ -75,6 +77,6 @@ class RegisterUser(QDialog):
                 binascii.hexlify(passwd_hash))
             self.messages.information(
                 self, 'Успех', 'Пользователь успешно зарегистрирован.')
-            # Рассылаем клиентам сообщение о необходимости обновить справичники
+            # Рассылаем клиентам сообщение о необходимости обновить справочники
             self.server.service_update_lists()
             self.close()
